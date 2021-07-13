@@ -1,27 +1,33 @@
-import { Flex, Heading, Image } from "@chakra-ui/react";
+import { useState } from "react";
 
 import Layout from "../components/Layout";
+import { Menu } from "../components/Menu";
+import { About } from "../screens/About";
+import { HomeScreen } from "../screens/HomeScreen";
+
+type activePaths = "Home" | "About";
 
 export default function Home() {
+  const [activePath, setActivePath] = useState<activePaths>("Home");
+
+  function toggleSwitchActivePath() {
+    if (activePath === "Home") {
+      setActivePath("About");
+    } else {
+      setActivePath("Home");
+    }
+  }
+
+  function checkCurrentPage(page: string) {
+    return page === activePath ? true : false;
+  }
   return (
-    <Layout title="Next-Typescript-ChakraUI Boilerplate">
-      <Flex
-        w="100%"
-        h="100vh"
-        bgColor="blackAlpha.900"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Heading color="whiteAlpha.900" m="4">
-          Boilerplate Next.js + Typescript + Chakra UI + React Query
-        </Heading>
-        <Image
-          w="2xl"
-          src="https://insideblock.com/assets/blog/nextjs-o-hype-da-hora-que-esta-dominando-o-desenvolvimento-front-end.png"
-          alt="Next"
-        />
-      </Flex>
+    <Layout title={`${activePath} | IMC Calculator`}>
+      <Menu
+        isCurrentPage={checkCurrentPage}
+        switchActivePath={toggleSwitchActivePath}
+      />
+      {activePath === "Home" ? <HomeScreen /> : <About />}
     </Layout>
   );
 }
